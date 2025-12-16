@@ -17,7 +17,6 @@ export class DashboardComponent implements OnInit {
   loading = true;
   isAdmin = false;
 
-  // Charts
   barChartOptions: ChartConfiguration['options'] = {
     responsive: true,
   };
@@ -51,7 +50,7 @@ export class DashboardComponent implements OnInit {
   }
 
   setupCharts(data: DashboardData) {
-    // Bar Chart
+    
     this.barChartData = {
       labels: data.charts.monthlyStats.labels,
       datasets: [
@@ -59,7 +58,7 @@ export class DashboardComponent implements OnInit {
       ]
     };
 
-    // Pie Chart
+    
     this.pieChartData = {
       labels: data.charts.userDistribution.labels,
       datasets: [
@@ -67,7 +66,7 @@ export class DashboardComponent implements OnInit {
       ]
     };
 
-    // Line Chart
+    
     this.lineChartData = {
       labels: data.charts.trendGraph.labels,
       datasets: [

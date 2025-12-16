@@ -26,14 +26,27 @@ export class ForgotPasswordComponent {
     });
   }
 
-  onSubmit() {
-    this.submitted = true;
-    if (this.forgotForm.valid) {
-      this.loading = true;
-      this.authService.forgotPassword(this.forgotForm.value.email).subscribe(() => {
-        this.success = true;
-        this.loading = false;
-      });
-    }
+ 
+onSubmit() {
+  this.submitted = true;
+
+  if (this.forgotForm.invalid) {
+    return;
   }
+
+  this.loading = true;
+  this.success = false;
+
+  this.authService.forgotPassword(this.forgotForm.value.email).subscribe({
+    next: () => {
+      this.success = true;
+      this.loading = false;
+    },
+    error: (err) => {
+      this.loading = false;
+      this.success = false;
+      alert(err.error?.message || 'Email not registered');
+    }
+  });
+}
 }

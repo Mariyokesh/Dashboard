@@ -7,13 +7,13 @@ export function mockInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn):
 
   const USERS: Record<string, string> = {
     'Mariyokesh': 'Admin',
-    'John': 'Editor',
+    'Jhon': 'Editor',
     'Kumar': 'Viewer'
   };
 
   const COMMON_PASSWORD = 'Login@123';
 
-  // Mock Dashboard Data
+  
   if (url.endsWith('/api/dashboard') && method === 'GET') {
     const mockData = {
       kpis: {
@@ -40,7 +40,7 @@ export function mockInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn):
     return ok(mockData);
   }
 
-  // Mock Login
+  
   if (url.endsWith('/api/auth/login') && method === 'POST') {
     const { username, password } = body as any;
     
@@ -71,12 +71,33 @@ export function mockInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn):
     }
   }
 
-  // Mock Forgot Password
-  if (url.endsWith('/api/auth/forgot-password') && method === 'POST') {
-    return ok({ message: 'Password reset link sent' });
+  
+  
+if (url.endsWith('/api/auth/forgot-password') && method === 'POST') {
+ 
+ const email =
+  (body as any)?.email ||
+  (body as any)?.username ||
+  (body as any)?.value?.email;
+
+  const validEmails = [
+    'mariyokesh@example.com',
+    'jhon@example.com',
+    'kumar@example.com'
+  ];
+
+  if (!email) {
+    return error(400, 'Email is required');
   }
 
-  // Mock User Role
+  if (!validEmails.includes(email)) {
+    return error(404, 'Email not registered');
+  }
+
+  return ok({ message: 'Password reset link sent' });
+}
+
+  
   if (url.endsWith('/api/user/role') && method === 'GET') {
     const token = req.headers.get('Authorization')?.replace('Bearer ', '');
     if (token) {
@@ -92,17 +113,17 @@ export function mockInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn):
     return error(401, 'Unauthorized');
   }
 
-  // Mock Resource Roles
+  
   if (url.endsWith('/api/roles') && method === 'GET') {
     return ok({ 
       dashboard: ['Admin', 'Editor', 'Viewer']
     });
   }
 
-  // Pass through other requests
+  
   return next(req);
 
-  // Helper functions
+  
   function ok(body: any) {
     return of(new HttpResponse({ status: 200, body })).pipe(delay(500));
   }
@@ -118,7 +139,7 @@ export function mockInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn):
       name: username,
       role: role,
       iat: Math.floor(Date.now() / 1000),
-      exp: Math.floor(Date.now() / 1000) + (24 * 60 * 60) // 1 day expiration
+      exp: Math.floor(Date.now() / 1000) + (24 * 60 * 60) 
     };
     
     const encode = (obj: any) => btoa(JSON.stringify(obj))

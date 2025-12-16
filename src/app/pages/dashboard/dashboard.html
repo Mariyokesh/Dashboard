@@ -7,7 +7,7 @@
   <div *ngIf="loading" class="loading">Loading...</div>
 
   <div *ngIf="!loading && data" class="content">
-    <!-- KPI Cards -->
+    
     <div class="kpi-grid">
       <div class="kpi-card">
         <h3>Total Users</h3>
@@ -27,7 +27,7 @@
       </div>
     </div>
 
-    <!-- Charts -->
+    
     <div class="charts-grid" [class.viewer-grid]="!isAdmin">
       <div class="chart-card" *ngIf="isAdmin">
         <h3>Monthly Revenue</h3>

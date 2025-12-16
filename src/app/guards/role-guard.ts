@@ -20,7 +20,6 @@ export const roleGuard: CanActivateFn = (route, state) => {
         return true;
       } else {
         alert('Access denied - Insufficient permissions');
-        // Optionally redirect or stay
         return false;
       }
     }),

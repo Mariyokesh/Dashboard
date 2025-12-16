@@ -13,8 +13,8 @@ export class AuthService {
   isLoggedIn$ = this.loggedIn.asObservable();
   
   private timeoutId: any;
-  private readonly SESSION_TIMEOUT = 15 * 60 * 1000; // 15 minutes
-
+  private readonly SESSION_TIMEOUT = 5 * 60 * 1000;
+  
   constructor(private router: Router, private http: HttpClient) {
     if (this.isAuthenticated()) {
       this.startSessionTimer();
@@ -29,7 +29,6 @@ export class AuthService {
       const decoded: any = jwtDecode(token);
       const currentTime = Math.floor(Date.now() / 1000);
       if (decoded.exp && decoded.exp < currentTime) {
-        // Token expired
         this.logout();
         return false;
       }
@@ -90,16 +89,12 @@ export class AuthService {
     return this.http.get<any>('/api/roles');
   }
 
-  // Session Timeout Logic
   private startSessionTimer() {
     this.stopSessionTimer();
     this.timeoutId = setTimeout(() => {
       alert('Session timed out due to inactivity.');
       this.logout();
-    }, this.SESSION_TIMEOUT);
-    
-    // Optional: Reset timer on user activity could be implemented with global event listeners
-    // For this task, simple fixed timeout from login/load is sufficient "Session timeout auto logout"
+    }, this.SESSION_TIMEOUT);       
   }
 
   private stopSessionTimer() {
